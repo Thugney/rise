@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /crm/admin/
+Disallow: /crm/login/
+Disallow: /crm/private/
+Disallow: /admin/
+Disallow: /wp-admin/ # If WordPress is used
+Disallow: /cgi-bin/
+Sitemap: https://eriteach.com/sitemap.xml
+Sitemap: https://learn.eriteach.com/sitemap.xml
+Sitemap: https://status.eriteach.com/sitemap.xml
+Sitemap: https://shop.eriteach.com/sitemap.xml

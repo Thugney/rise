@@ -1,0 +1,92 @@
+/*Write your custom css in this file.*/
+/* Footer Styling */
+.enhanced-footer {
+    clear: both;
+    position: relative;
+    z-index: 1;
+}
+
+.enhanced-footer h5 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.enhanced-footer ul li {
+    margin-bottom: 5px;
+}
+
+.social-icons a {
+    color: #fff;
+    margin-right: 10px;
+    font-size: 20px;
+}
+
+/* Cookie Banner */
+#cookie-consent-banner {
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+#cookie-consent-banner label {
+    margin-right: 10px;
+}
+/* Make body flex to push footer to bottom */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.enhanced-footer {
+    margin-top: auto;
+}
+
+/* Responsive Cookie Banner */
+#cookie-consent-banner {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#cookie-consent-banner p, #cookie-consent-banner label {
+    margin: 5px;
+}
+
+@media (max-width: 576px) {
+    #cookie-consent-banner {
+        text-align: left;
+        padding: 10px;
+    }
+    #cookie-consent-banner button {
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+/* Ensure full height for body */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    flex-grow: 1;
+}
+
+/* Footer */
+footer {
+    flex-shrink: 0;
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .row {
+        flex-direction: column;
+    }
+    .col-md-3 {
+        margin-bottom: 20px;
+    }
+    .container {
+        padding: 10px;
+    }
+}

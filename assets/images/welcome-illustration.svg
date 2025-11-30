@@ -1,0 +1,95 @@
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8eaf6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f3e5f5;stop-opacity:1" />
+    </linearGradient>
+    
+    <linearGradient id="door" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    
+    <filter id="shadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="8"/>
+      <feOffset dx="0" dy="8" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.2"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="250" cy="250" r="220" fill="url(#bg)"/>
+  
+  <!-- Door/Portal -->
+  <g filter="url(#shadow)">
+    <rect x="180" y="120" width="140" height="260" rx="15" fill="url(#door)"/>
+    
+    <!-- Door frame highlight -->
+    <rect x="190" y="130" width="120" height="240" rx="10" fill="none" stroke="white" stroke-width="3" opacity="0.2"/>
+    
+    <!-- Door panels -->
+    <rect x="200" y="150" width="100" height="90" rx="8" fill="white" opacity="0.1"/>
+    <rect x="200" y="260" width="100" height="100" rx="8" fill="white" opacity="0.1"/>
+    
+    <!-- Door handle -->
+    <circle cx="285" cy="280" r="8" fill="white" opacity="0.9"/>
+    <ellipse cx="285" cy="280" rx="5" ry="8" fill="white" opacity="0.6"/>
+  </g>
+  
+  <!-- Welcome arrow -->
+  <g transform="translate(100, 240)">
+    <path d="M 0,10 L 60,10" stroke="#667eea" stroke-width="6" stroke-linecap="round" fill="none">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M 45,0 L 60,10 L 45,20" stroke="#667eea" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+      <animate attributeName="opacity" values="0.4;1;0.4" dur="2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  
+  <!-- Lock icon above door -->
+  <g transform="translate(235, 80)" filter="url(#shadow)">
+    <circle cx="15" cy="20" r="22" fill="white"/>
+    <rect x="4" y="18" width="22" height="18" rx="3" fill="url(#door)"/>
+    <path d="M 10,18 L 10,13 C 10,9 12,7 15,7 C 18,7 20,9 20,13 L 20,18" 
+          stroke="url(#door)" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <circle cx="15" cy="27" r="3" fill="white"/>
+    <line x1="15" y1="30" x2="15" y2="33" stroke="white" stroke-width="2" stroke-linecap="round"/>
+  </g>
+  
+  <!-- Decorative floating elements -->
+  <circle cx="380" cy="180" r="6" fill="#667eea" opacity="0.3">
+    <animate attributeName="cy" values="180;170;180" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="120" cy="150" r="8" fill="#764ba2" opacity="0.2">
+    <animate attributeName="cy" values="150;140;150" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="370" cy="320" r="5" fill="#667eea" opacity="0.25">
+    <animate attributeName="cy" values="320;310;320" dur="3.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="130" cy="360" r="7" fill="#764ba2" opacity="0.2">
+    <animate attributeName="cy" values="360;350;360" dur="4.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Shield icon for security -->
+  <g transform="translate(340, 380)" opacity="0.4">
+    <path d="M 15,0 L 25,5 L 25,18 Q 25,25 15,30 Q 5,25 5,18 L 5,5 Z" 
+          fill="none" stroke="#667eea" stroke-width="2.5"/>
+    <path d="M 12,15 L 15,18 L 20,11" stroke="#667eea" stroke-width="2.5" 
+          stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  
+  <!-- Key icon -->
+  <g transform="translate(90, 380)" opacity="0.4">
+    <circle cx="10" cy="10" r="7" fill="none" stroke="#764ba2" stroke-width="2.5"/>
+    <line x1="15" y1="15" x2="25" y2="25" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="22" y1="22" x2="22" y2="26" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="24" y1="24" x2="28" y2="24" stroke="#764ba2" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+</svg>

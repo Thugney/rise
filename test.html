@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+    <!-- Google tag (gtag.js) with Consent Mode -->
+    <script>
+      // Define dataLayer and the gtag function
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+
+      // Set default consent to 'denied' for compliance with region-specific rules
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'region': ['EEA']
+      });
+    </script>
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6GMRXK3RQ9"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-6GMRXK3RQ9', {
+        'cookie_expires': 2 * 365 * 24 * 60 * 60 // Set to 2 years (default for _ga)
+      });
+    </script>
+
+    <!-- Functions to update consent based on user choice -->
+    <script>
+      function grantAnalyticsConsent() {
+        gtag('consent', 'update', {
+          'analytics_storage': 'granted'
+        });
+      }
+
+      function grantAdConsent() {
+        gtag('consent', 'update', {
+          'ad_storage': 'granted',
+          'ad_user_data': 'granted',
+          'ad_personalization': 'granted'
+        });
+      }
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Profesjonell Markedsføringsbyrå  | SEO, SoMe & E-handel | Online-kurs | Eriteach</title>
+    <meta name="description" content="Profesjonell Markedsføringsbyrå  | SEO, SoMe & E-handel | Online-kurs | Eriteach spesialiserer på SEO, sosiale medier og e-handelsløsninger nett-kurs. Vi hjelper bedrifter i Oslo, Bergen og hele Norge med å øke synlighet og salg online.">
+    <meta name="keywords" content="markedsføringsbyrå Norge, digital markedsføring Oslo, SEO-tjenester, sosiale medier strategi, e-handelsoptimalisering, nettbutikk markedsføring, Google Ads, Facebook markedsføring, Instagram markedsføring, konverteringsoptimalisering, innholdsmarkedsføring, lokal SEO Norge, B2B markedsføring, B2C markedsføring">
+    <link rel="canonical" href="https://eriteach.com/">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:title" content="Profesjonell Markedsføringsbyrå  | SEO, SoMe & E-handel | Online-kurs | Eriteach>
+    <meta property="og:description" content="Eriteach er et ledende markedsføringsbyrå i Norge som spesialiserer seg på SEO, sosiale medier og e-handelsløsninger. Vi hjelper bedrifter i Oslo, Bergen og hele Norge med å øke synlighet og salg online.">
+    <meta property="og:url" content="https://eriteach.com/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://eriteach.com/assets/images/logo.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Profesjonell Markedsføringsbyrå  | SEO, SoMe & E-handel | Online-kurs | Eriteach">
+    <meta name="twitter:description" content="Eriteach er et ledende markedsføringsbyrå i Norge som spesialiserer seg på SEO, sosiale medier og e-handelsløsninger.">
+    <meta name="twitter:image" content="https://eriteach.com/assets/images/logo.png">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/favicon-CvpG38D5.png">
+
+    <!-- Preload Critical Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #10a37f;
+            --text-primary: #2d333a;
+            --text-secondary: #6e6e80;
+            --border-color: #e5e5e5;
+            --bg-white: #ffffff;
+            --bg-subtle: #f9f9f9;
+            --hover-bg: #f5f5f5;
+            --font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            font-family: var(--font-family);
+            color: var(--text-primary);
+            line-height: 1.6;
+            background: var(--bg-white);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+
+        .btn-primary {
+            background: var(--text-primary);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            background: #1a1a1a;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            padding: 0.6rem 1.2rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            background: var(--hover-bg);
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+        }
+
+        .hamburger i {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 300px;
+            height: 100vh;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            transition: right 0.3s ease;
+            z-index: 1001;
+        }
+
+        .mobile-menu.active {
+            right: 0;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .close-menu {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .mobile-nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: 500;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+
+        .overlay.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Path Selection */
+        .path-selection {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .path-selection h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .path-selection p {
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .path-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .path-card {
+            background: white;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .path-card:hover {
+            border-color: var(--text-primary);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transform: translateY(-4px);
+        }
+
+        .path-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--bg-subtle);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 1.75rem;
+            color: var(--text-primary);
+        }
+
+        .path-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .path-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .path-card .btn-secondary {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Services Section */
+        .services {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+            background: var(--bg-subtle);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            border-color: var(--text-secondary);
+        }
+
+        .service-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--bg-subtle);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .service-card h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+
+        .service-card p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .service-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-list li {
+            padding: 0.3rem 0;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .service-list li:before {
+            content: "•";
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        /* How it Works */
+        .how-it-works {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background: var(--text-primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .step h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .step p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: var(--bg-subtle);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            padding: 4rem 2rem;
+            margin: 4rem 0;
+        }
+
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .cta-content h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .cta-content p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--text-primary);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero {
+                padding: 6rem 1.5rem 3rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .path-cards {
+                grid-template-columns: 1fr;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="/" class="logo">Eriteach</a>
+            <div class="nav-links">
+                <a href="#tjenester" class="nav-link">Tjenester</a>
+                <a href="#hvordan" class="nav-link">Hvordan</a>
+                <a href="#kontakt" class="nav-link">Kontakt</a>
+                <a href="https://eriteach.com/crm/signin" class="btn-primary" target="_blank">
+                    <i class="fas fa-sign-in-alt"></i> Logg Inn
+                </a>
+            </div>
+            <button class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="overlay" onclick="toggleMenu()"></div>
+    <div class="mobile-menu">
+        <div class="mobile-menu-header">
+            <span class="logo">Eriteach</span>
+            <button class="close-menu" onclick="toggleMenu()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="mobile-nav-links">
+            <a href="#tjenester" class="mobile-nav-link" onclick="toggleMenu()">Tjenester</a>
+            <a href="#hvordan" class="mobile-nav-link" onclick="toggleMenu()">Hvordan</a>
+            <a href="#kontakt" class="mobile-nav-link" onclick="toggleMenu()">Kontakt</a>
+            <a href="https://eriteach.com/crm/signin" class="btn-primary" target="_blank">
+                <i class="fas fa-sign-in-alt"></i> Logg Inn
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Digital Markedsføring, IT-Kurs & Kreative Tjenester</h1>
+        <p>Vi hjelper bedrifter og privatpersoner med alt fra nettutvikling til IT-opplæring og profesjonell foto/video.</p>
+        <div class="hero-buttons">
+            <a href="#hva-soker-du" class="btn-primary">
+                <i class="fas fa-rocket"></i> Kom i Gang
+            </a>
+            <a href="#tjenester" class="btn-secondary">
+                <i class="fas fa-compass"></i> Utforsk Tjenester
+            </a>
+        </div>
+    </section>
+
+    <!-- Path Selection -->
+    <section id="hva-soker-du" class="path-selection">
+        <h2>Hva søker du?</h2>
+        <p>Velg det som passer best for deg</p>
+        <div class="path-cards">
+            <div class="path-card" onclick="window.location.href='https://eriteach.com/crm'">
+                <div class="path-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>Lær Nye Ferdigheter</h3>
+                <p>Ta kurs i IT, Microsoft 365, AI, digital markedsføring og mer. Lær i ditt eget tempo med våre online kurs.</p>
+                <a href="https://eriteach.com/crm" class="btn-secondary">
+                    <i class="fas fa-book-open"></i> Se Alle Kurs
+                </a>
+            </div>
+
+            <div class="path-card" onclick="window.location.href='/services/select.html'">
+                <div class="path-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3>Profesjonelle Tjenester</h3>
+                <p>Trenger du hjelp med nettside, markedsføring, eller fotografi? Vi leverer skreddersydde løsninger.</p>
+                <a href="/services/select.html" class="btn-secondary">
+                    <i class="fas fa-arrow-right"></i> Bestill Tjeneste
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section id="tjenester" class="services">
+        <h2 class="section-title">Alle Våre Tjenester</h2>
+        <p class="section-subtitle">Fra digitale løsninger til kreative tjenester</p>
+        <div class="services-grid">
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Nettutvikling</h3>
+                <p>Moderne nettsider og nettbutikker</p>
+                <ul class="service-list">
+                    <li>WordPress nettsider</li>
+                    <li>WooCommerce & Shopify</li>
+                    <li>Responsivt design</li>
+                    <li>Hosting & vedlikehold</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <h3>Digital Markedsføring</h3>
+                <p>Øk din synlighet online</p>
+                <ul class="service-list">
+                    <li>SEO-optimalisering</li>
+                    <li>Google Ads</li>
+                    <li>Facebook & Instagram ads</li>
+                    <li>Innholdsstrategi</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h3>IT-Kurs</h3>
+                <p>Lær nye digitale ferdigheter</p>
+                <ul class="service-list">
+                    <li>Microsoft 365</li>
+                    <li>AI & Prompt Engineering</li>
+                    <li>Dropshipping & E-handel</li>
+                    <li>Kurs på Tigrinya</li>
+                </ul>
+            </div>
+
+            <div class="service-card">
+                <div class="service-icon">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <h3>Foto & Video</h3>
+                <p>Profesjonell fotografering</p>
+                <ul class="service-list">
+                    <li>Bryllup & Dåp</li>
+                    <li>Event fotografi</li>
+                    <li>Videoredigering</li>
+                    <li>Foto/video kurs</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section id="hvordan" class="how-it-works">
+        <h2 class="section-title">Hvordan Det Fungerer</h2>
+        <p class="section-subtitle">Enkelt og oversiktlig</p>
+        <div class="steps">
+            <div class="step">
+                <div class="step-number">1</div>
+                <h3>Velg Hva Du Trenger</h3>
+                <p>Kurs eller profesjonell tjeneste? Du bestemmer.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <h3>Registrer Deg eller Bestill</h3>
+                <p>Opprett konto for kurs, eller be om tilbud på tjenester.</p>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <h3>Kom i Gang</h3>
+                <p>Start læringen eller la oss jobbe med ditt prosjekt.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="kontakt" class="cta-section">
+        <div class="cta-content">
+            <h2>Klar til å komme i gang?</h2>
+            <p>Enten du vil lære noe nytt eller trenger hjelp med et prosjekt - vi er her for deg.</p>
+            <div class="hero-buttons">
+                <a href="https://eriteach.com/crm" class="btn-primary">
+                    <i class="fas fa-graduation-cap"></i> Se Kurs
+                </a>
+                <a href="/services/select.html" class="btn-secondary">
+                    <i class="fas fa-briefcase"></i> Bestill Tjeneste
+                </a>
+                <a href="mailto:info@eriteach.com" class="btn-secondary">
+                    <i class="fas fa-envelope"></i> Send E-post
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Tjenester</h4>
+                <div class="footer-links">
+                    <a href="/services/select.html" class="footer-link">Nettutvikling</a>
+                    <a href="https://eriteach.com/crm" class="footer-link">IT-Kurs</a>
+                    <a href="/photo" class="footer-link">Foto & Video</a>
+                    <a href="/services/select.html" class="footer-link">Digital Markedsføring</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Selskap</h4>
+                <div class="footer-links">
+                    <a href="/about/om-oss" class="footer-link">Om Oss</a>
+                    <a href="/about/karriere" class="footer-link">Karriere</a>
+                    <a href="#kontakt" class="footer-link">Kontakt</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Kundeportal</h4>
+                <div class="footer-links">
+                    <a href="https://eriteach.com/crm" class="footer-link">Kursportal</a>
+                    <a href="https://eriteach.com/crm/signin" class="footer-link">Logg Inn</a>
+                    <a href="https://eriteach.com/crm/signup" class="footer-link">Registrer Deg</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Juridisk</h4>
+                <div class="footer-links">
+                    <a href="/about/personvern" class="footer-link">Personvern</a>
+                    <a href="/about/terms" class="footer-link">Vilkår</a>
+                    <a href="/about/cookies" class="footer-link">Cookies</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Eriteach. Alle rettigheter reservert.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const overlay = document.querySelector('.overlay');
+            const hamburger = document.querySelector('.hamburger i');
+            
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            
+            if (mobileMenu.classList.contains('active')) {
+                hamburger.classList.remove('fa-bars');
+                hamburger.classList.add('fa-times');
+                document.body.style.overflow = 'hidden';
+            } else {
+                hamburger.classList.remove('fa-times');
+                hamburger.classList.add('fa-bars');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href !== '#' && href !== '#kontakt') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                header.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)';
+            } else {
+                header.style.boxShadow = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

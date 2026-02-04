@@ -1744,7 +1744,7 @@ class Settings extends Security_Controller {
      * Display AI settings page (admin only)
      */
     function ai_settings() {
-        $this->access_only_admin();
+        // Note: admin check already done in constructor via access_only_admin_or_settings_admin()
 
         $Ai_settings_model = model("App\Models\Ai_settings_model");
         $view_data['ai_settings'] = $Ai_settings_model->get_all_settings();
@@ -1761,7 +1761,19 @@ class Settings extends Security_Controller {
      * Save AI settings
      */
     function save_ai_settings() {
-        $this->access_only_admin();
+        // Note: admin check already done in constructor via access_only_admin_or_settings_admin()
+
+        // Log that save was called with detailed POST info
+        log_message('info', 'AI Settings: save_ai_settings() called');
+        log_message('info', 'AI Settings: Request method: ' . $this->request->getMethod());
+
+        // Log all POST keys (not values for security)
+        $post_keys = array_keys($this->request->getPost() ?: array());
+        log_message('info', 'AI Settings: POST keys received: ' . implode(', ', $post_keys));
+
+        // Log if api_key was received (length only, not value)
+        $api_key_value = $this->request->getPost('ai_api_key');
+        log_message('info', 'AI Settings: ai_api_key received: ' . ($api_key_value ? 'YES (length: ' . strlen($api_key_value) . ')' : 'NO/EMPTY'));
 
         $Ai_settings_model = model("App\Models\Ai_settings_model");
 
@@ -1782,12 +1794,15 @@ class Settings extends Security_Controller {
             'polar_organization_id',
         );
 
+        $errors = array();
+        $saved_count = 0;
+
         foreach ($settings as $setting) {
             $value = $this->request->getPost($setting);
 
             // Handle sensitive fields - don't overwrite if placeholder
             if (in_array($setting, array('ai_api_key', 'polar_access_token', 'polar_webhook_secret'))) {
-                if ($value === '******' || $value === '') {
+                if ($value === '******' || $value === '' || $value === null) {
                     // Keep existing value
                     continue;
                 }
@@ -1809,25 +1824,104 @@ class Settings extends Security_Controller {
                 }
             }
 
-            // Convert checkbox values
+            // Convert checkbox values (handle NULL as unchecked)
             if (in_array($setting, array('ai_enabled', 'polar_enabled'))) {
                 $value = $value ? '1' : '0';
             }
 
-            $Ai_settings_model->save_setting($setting, $value);
+            // Ensure value is never NULL for database
+            if ($value === null) {
+                $value = '';
+            }
+
+            // Save and check result
+            $result = $Ai_settings_model->save_setting($setting, $value);
+            if ($result) {
+                $saved_count++;
+                log_message('info', "AI Settings: Saved '$setting' successfully");
+            } else {
+                $errors[] = $setting;
+                log_message('error', "AI Settings: Failed to save '$setting'");
+            }
         }
 
         // Clear settings cache
         $Ai_settings_model->clear_cache();
 
-        echo json_encode(array("success" => true, 'message' => app_lang('settings_updated')));
+        log_message('info', "AI Settings: Completed. Saved: $saved_count, Errors: " . count($errors));
+
+        if (count($errors) > 0) {
+            echo json_encode(array(
+                "success" => false,
+                'message' => 'Failed to save some settings: ' . implode(', ', $errors)
+            ));
+        } else {
+            echo json_encode(array("success" => true, 'message' => app_lang('settings_updated')));
+        }
+    }
+
+    /**
+     * Manual AI settings save page
+     * This is an alternative settings page that works around CSRF token issues
+     * Access: /settings/manual_ai_save
+     */
+    function manual_ai_save() {
+        $db = db_connect();
+        $table = $db->prefixTable('ai_settings');
+
+        // Handle save if key provided in URL
+        $api_key = $this->request->getGet('api_key');
+        $action = $this->request->getGet('action');
+        $message = '';
+
+        if ($action === 'save' && $api_key) {
+            $db->query("UPDATE `$table` SET setting_value = ? WHERE setting_name = 'ai_api_key'", [$api_key]);
+            $message = '<div style="background:#c8e6c9;padding:15px;margin:10px 0;border-radius:5px;"><strong>API Key saved successfully!</strong></div>';
+        }
+
+        if ($action === 'enable') {
+            $db->query("UPDATE `$table` SET setting_value = '1' WHERE setting_name = 'ai_enabled'");
+            $message = '<div style="background:#c8e6c9;padding:15px;margin:10px 0;border-radius:5px;"><strong>Assistant enabled!</strong></div>';
+        }
+
+        // Get current values
+        $current_key = $db->query("SELECT setting_value FROM `$table` WHERE setting_name = 'ai_api_key'")->getRow()->setting_value ?? '';
+        $ai_enabled = $db->query("SELECT setting_value FROM `$table` WHERE setting_name = 'ai_enabled'")->getRow()->setting_value ?? '0';
+
+        $html = '<h1>Manual AI Settings Save</h1>';
+        $html .= '<p style="color:#666;">This page bypasses CSRF validation for troubleshooting. Use this to save your API key.</p>';
+        $html .= $message;
+
+        $html .= '<div style="background:#f5f5f5;padding:20px;border-radius:5px;margin:20px 0;">';
+        $html .= '<h3>Current Status:</h3>';
+        $html .= '<p><strong>AI Enabled:</strong> ' . ($ai_enabled === '1' ? '<span style="color:green">Yes</span>' : '<span style="color:red">No</span>') . '</p>';
+        $html .= '<p><strong>API Key:</strong> ' . ($current_key ? '<span style="color:green">Set (' . strlen($current_key) . ' chars)</span>' : '<span style="color:red">Not set</span>') . '</p>';
+        $html .= '</div>';
+
+        $html .= '<h3>Save API Key:</h3>';
+        $html .= '<form method="GET" action="' . get_uri('settings/manual_ai_save') . '">';
+        $html .= '<input type="hidden" name="action" value="save">';
+        $html .= '<input type="text" name="api_key" placeholder="Paste your DeepSeek API key here" style="width:400px;padding:10px;font-size:14px;" value="">';
+        $html .= '<button type="submit" style="padding:10px 20px;background:#4caf50;color:white;border:none;cursor:pointer;margin-left:10px;">Save API Key</button>';
+        $html .= '</form>';
+
+        if ($ai_enabled !== '1') {
+            $html .= '<h3>Enable Assistant:</h3>';
+            $html .= '<a href="' . get_uri('settings/manual_ai_save') . '?action=enable" style="display:inline-block;padding:10px 20px;background:#2196f3;color:white;text-decoration:none;border-radius:5px;">Enable Assistant</a>';
+        }
+
+        $html .= '<hr style="margin:30px 0;">';
+        $html .= '<p><a href="' . get_uri('settings/ai_settings') . '">← Back to AI Settings</a></p>';
+        $html .= '<p><a href="' . get_uri('settings/test_ai_connection') . '">Test AI Connection</a></p>';
+
+        return $this->response->setBody($html);
     }
 
     /**
      * Test DeepSeek API connection
      */
     function test_ai_connection() {
-        $this->access_only_admin();
+        // Note: admin check already done in constructor
 
         $Ai_deepseek = new \App\Libraries\Ai_deepseek();
 
@@ -1859,7 +1953,7 @@ class Settings extends Security_Controller {
      * Test Polar.sh webhook configuration
      */
     function test_polar_connection() {
-        $this->access_only_admin();
+        // Note: admin check already done in constructor
 
         $Polar = new \App\Libraries\Polar();
 

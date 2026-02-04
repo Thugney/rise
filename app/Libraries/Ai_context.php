@@ -222,6 +222,12 @@ class Ai_context {
                 return $this->get_tickets_context($query);
             case 'leads':
                 return $this->get_leads_context($query);
+            case 'estimates':
+                return $this->get_estimates_context($query);
+            case 'expenses':
+                return $this->get_expenses_context($query);
+            case 'contracts':
+                return $this->get_contracts_context($query);
             default:
                 return array('note' => "Module '{$module}' context not implemented");
         }
@@ -432,10 +438,13 @@ class Ai_context {
             'total_paid' => 0,
             'total_due' => 0,
             'overdue_count' => 0,
-            'recent_invoices' => array()
+            'paid_count' => 0,
+            'recent_invoices' => array(),
+            'recent_payments' => array()
         );
 
         $today = date('Y-m-d');
+        $paid_invoices = array();
 
         foreach ($invoices as $invoice) {
             // Count by status
@@ -456,6 +465,12 @@ class Ai_context {
             if ($status !== 'paid' && !empty($invoice->due_date) && $invoice->due_date < $today) {
                 $summary['overdue_count']++;
             }
+
+            // Track paid invoices for recent payments
+            if ($status === 'paid' || $paid > 0) {
+                $summary['paid_count']++;
+                $paid_invoices[] = $invoice;
+            }
         }
 
         // Get 10 most recent invoices
@@ -468,8 +483,41 @@ class Ai_context {
                 'status' => $invoice->status ?? 'Unknown',
                 'total' => $invoice->invoice_total ?? 0,
                 'paid' => $invoice->payment_received ?? 0,
-                'due_date' => $invoice->due_date
+                'due_date' => $invoice->due_date,
+                'bill_date' => $invoice->bill_date ?? null
             );
+        }
+
+        // Get payment details for paid invoices (last 5)
+        $recent_paid = array_slice($paid_invoices, 0, 5);
+        foreach ($recent_paid as $invoice) {
+            // Try to get payment details
+            $payment_info = array(
+                'invoice_id' => $invoice->id,
+                'invoice_number' => $invoice->invoice_id ?? 'N/A',
+                'client' => $invoice->company_name ?? 'N/A',
+                'amount_paid' => $invoice->payment_received ?? 0,
+                'total' => $invoice->invoice_total ?? 0,
+                'payment_date' => $invoice->last_payment_date ?? $invoice->bill_date ?? 'Unknown'
+            );
+
+            // Try to get actual payment records if model method exists
+            try {
+                $Invoice_payments_model = model('App\Models\Invoice_payments_model');
+                if ($Invoice_payments_model && method_exists($Invoice_payments_model, 'get_payments_of_invoice')) {
+                    $payments = $Invoice_payments_model->get_payments_of_invoice($invoice->id)->getResult();
+                    if (!empty($payments)) {
+                        $last_payment = end($payments);
+                        $payment_info['payment_date'] = $last_payment->payment_date ?? 'Unknown';
+                        $payment_info['payment_method'] = $last_payment->payment_method_title ?? 'Unknown';
+                        $payment_info['payment_note'] = $last_payment->note ?? '';
+                    }
+                }
+            } catch (\Exception $e) {
+                // Model might not exist, use basic info
+            }
+
+            $summary['recent_payments'][] = $payment_info;
         }
 
         return $summary;
@@ -597,6 +645,196 @@ class Ai_context {
         }
 
         return $summary;
+    }
+
+    /**
+     * Get estimates context with permission filtering
+     */
+    public function get_estimates_context($query = '') {
+        if (!get_setting('module_estimate')) {
+            return array('note' => 'Estimate module is disabled');
+        }
+
+        $estimate_permission = get_array_value($this->permissions, 'estimate');
+
+        if (!$this->login_user->is_admin && empty($estimate_permission) && $this->login_user->user_type !== 'client') {
+            return array('note' => 'No access to estimates module');
+        }
+
+        try {
+            $Estimates_model = model('App\Models\Estimates_model');
+            $options = array('deleted' => 0);
+
+            // Apply permission filters
+            if ($this->login_user->user_type === 'client') {
+                $options['client_id'] = $this->login_user->client_id;
+            }
+
+            $estimates = $Estimates_model->get_details($options)->getResult();
+
+            $summary = array(
+                'total_count' => count($estimates),
+                'by_status' => array(),
+                'total_amount' => 0,
+                'recent_estimates' => array()
+            );
+
+            foreach ($estimates as $estimate) {
+                $status = $estimate->status ?? 'draft';
+                if (!isset($summary['by_status'][$status])) {
+                    $summary['by_status'][$status] = 0;
+                }
+                $summary['by_status'][$status]++;
+                $summary['total_amount'] += floatval($estimate->estimate_total ?? 0);
+            }
+
+            // Get 10 most recent estimates
+            $recent = array_slice($estimates, 0, 10);
+            foreach ($recent as $estimate) {
+                $summary['recent_estimates'][] = array(
+                    'id' => $estimate->id,
+                    'estimate_number' => $estimate->estimate_id ?? 'N/A',
+                    'client' => $estimate->company_name ?? 'N/A',
+                    'status' => $estimate->status ?? 'draft',
+                    'total' => $estimate->estimate_total ?? 0,
+                    'valid_until' => $estimate->valid_until ?? null
+                );
+            }
+
+            return $summary;
+        } catch (\Exception $e) {
+            return array('note' => 'Could not load estimates data');
+        }
+    }
+
+    /**
+     * Get expenses context with permission filtering
+     */
+    public function get_expenses_context($query = '') {
+        if (!get_setting('module_expense')) {
+            return array('note' => 'Expense module is disabled');
+        }
+
+        $expense_permission = get_array_value($this->permissions, 'expense');
+
+        if (!$this->login_user->is_admin && empty($expense_permission)) {
+            return array('note' => 'No access to expenses module');
+        }
+
+        try {
+            $Expenses_model = model('App\Models\Expenses_model');
+            $options = array('deleted' => 0);
+
+            // Apply permission filters
+            if (!$this->login_user->is_admin && $expense_permission === 'own') {
+                $options['user_id'] = $this->login_user->id;
+            }
+
+            $expenses = $Expenses_model->get_details($options)->getResult();
+
+            $summary = array(
+                'total_count' => count($expenses),
+                'by_category' => array(),
+                'total_amount' => 0,
+                'recent_expenses' => array()
+            );
+
+            foreach ($expenses as $expense) {
+                $category = $expense->category_title ?? 'Uncategorized';
+                if (!isset($summary['by_category'][$category])) {
+                    $summary['by_category'][$category] = 0;
+                }
+                $summary['by_category'][$category]++;
+                $summary['total_amount'] += floatval($expense->amount ?? 0);
+            }
+
+            // Get 10 most recent expenses
+            $recent = array_slice($expenses, 0, 10);
+            foreach ($recent as $expense) {
+                $summary['recent_expenses'][] = array(
+                    'id' => $expense->id,
+                    'title' => $expense->title ?? 'N/A',
+                    'category' => $expense->category_title ?? 'N/A',
+                    'amount' => $expense->amount ?? 0,
+                    'date' => $expense->expense_date ?? null,
+                    'project' => $expense->project_title ?? null
+                );
+            }
+
+            return $summary;
+        } catch (\Exception $e) {
+            return array('note' => 'Could not load expenses data');
+        }
+    }
+
+    /**
+     * Get contracts context with permission filtering
+     */
+    public function get_contracts_context($query = '') {
+        if (!get_setting('module_contract')) {
+            return array('note' => 'Contract module is disabled');
+        }
+
+        $contract_permission = get_array_value($this->permissions, 'contract');
+
+        if (!$this->login_user->is_admin && empty($contract_permission) && $this->login_user->user_type !== 'client') {
+            return array('note' => 'No access to contracts module');
+        }
+
+        try {
+            $Contracts_model = model('App\Models\Contracts_model');
+            $options = array('deleted' => 0);
+
+            // Apply permission filters
+            if ($this->login_user->user_type === 'client') {
+                $options['client_id'] = $this->login_user->client_id;
+            }
+
+            $contracts = $Contracts_model->get_details($options)->getResult();
+
+            $summary = array(
+                'total_count' => count($contracts),
+                'by_status' => array(),
+                'total_value' => 0,
+                'expiring_soon' => 0,
+                'recent_contracts' => array()
+            );
+
+            $today = date('Y-m-d');
+            $soon = date('Y-m-d', strtotime('+30 days'));
+
+            foreach ($contracts as $contract) {
+                $status = $contract->status ?? 'draft';
+                if (!isset($summary['by_status'][$status])) {
+                    $summary['by_status'][$status] = 0;
+                }
+                $summary['by_status'][$status]++;
+                $summary['total_value'] += floatval($contract->contract_value ?? 0);
+
+                // Check expiring soon
+                if (!empty($contract->end_date) && $contract->end_date >= $today && $contract->end_date <= $soon) {
+                    $summary['expiring_soon']++;
+                }
+            }
+
+            // Get 10 most recent contracts
+            $recent = array_slice($contracts, 0, 10);
+            foreach ($recent as $contract) {
+                $summary['recent_contracts'][] = array(
+                    'id' => $contract->id,
+                    'title' => $contract->title ?? 'N/A',
+                    'client' => $contract->company_name ?? 'N/A',
+                    'status' => $contract->status ?? 'draft',
+                    'value' => $contract->contract_value ?? 0,
+                    'start_date' => $contract->start_date ?? null,
+                    'end_date' => $contract->end_date ?? null
+                );
+            }
+
+            return $summary;
+        } catch (\Exception $e) {
+            return array('note' => 'Could not load contracts data');
+        }
     }
 
     /**
@@ -801,6 +1039,10 @@ class Ai_context {
                 $output[] = "- Overdue: " . $module_data['overdue_count'];
             }
 
+            if (isset($module_data['paid_count'])) {
+                $output[] = "- Paid: " . $module_data['paid_count'];
+            }
+
             if (isset($module_data['open_count']) && $module_data['open_count'] > 0) {
                 $output[] = "- Open: " . $module_data['open_count'];
             }
@@ -809,8 +1051,39 @@ class Ai_context {
                 $output[] = "- By Status: " . json_encode($module_data['by_status']);
             }
 
+            if (isset($module_data['total_amount']) && $module_data['total_amount'] > 0) {
+                $output[] = "- Total Amount: " . number_format($module_data['total_amount'], 2);
+            }
+
+            if (isset($module_data['total_paid']) && $module_data['total_paid'] > 0) {
+                $output[] = "- Total Paid: " . number_format($module_data['total_paid'], 2);
+            }
+
             if (isset($module_data['total_due']) && $module_data['total_due'] > 0) {
                 $output[] = "- Total Due: " . number_format($module_data['total_due'], 2);
+            }
+
+            // Add recent payment details for invoices
+            if ($module === 'invoices' && !empty($module_data['recent_payments'])) {
+                $output[] = "";
+                $output[] = "RECENT PAYMENTS:";
+                foreach ($module_data['recent_payments'] as $payment) {
+                    $output[] = "- Invoice #{$payment['invoice_number']} ({$payment['client']}): " .
+                                number_format($payment['amount_paid'], 2) . " paid on " .
+                                ($payment['payment_date'] ?? 'Unknown') .
+                                (isset($payment['payment_method']) ? " via " . $payment['payment_method'] : "");
+                }
+            }
+
+            // Add recent invoices details
+            if ($module === 'invoices' && !empty($module_data['recent_invoices'])) {
+                $output[] = "";
+                $output[] = "RECENT INVOICES:";
+                foreach (array_slice($module_data['recent_invoices'], 0, 5) as $inv) {
+                    $output[] = "- #{$inv['invoice_number']} ({$inv['client']}): " .
+                                number_format($inv['total'], 2) . " - Status: {$inv['status']}" .
+                                ($inv['due_date'] ? ", Due: {$inv['due_date']}" : "");
+                }
             }
 
             $output[] = "";

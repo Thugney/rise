@@ -3,11 +3,11 @@
 $lang["example"] = "Example";
 
 // AI Assistant Language Keys
-$lang["ai_assistant"] = "AI Assistant";
+$lang["ai_assistant"] = "Assistant";
 $lang["ai_settings"] = "AI Settings";
 $lang["ai_configuration"] = "AI Configuration";
-$lang["ai_enable_assistant"] = "Enable AI Assistant";
-$lang["ai_enable_assistant_help"] = "Enable or disable the AI assistant feature for all users";
+$lang["ai_enable_assistant"] = "Enable Assistant";
+$lang["ai_enable_assistant_help"] = "Enable or disable the assistant feature for all users";
 $lang["ai_api_key"] = "API Key";
 $lang["ai_api_key_help"] = "Your DeepSeek API key";
 $lang["ai_model"] = "AI Model";
@@ -51,7 +51,7 @@ $lang["ai_queries_today"] = "AI Queries Today";
 $lang["no_statistics_available"] = "No statistics available";
 
 // AI Chat Widget
-$lang["ai_welcome_message"] = "Hello! I'm your AI assistant. I can help you with CRM tasks, project management questions, and general business guidance. How can I assist you today?";
+$lang["ai_welcome_message"] = "Hello! I'm your assistant. I can help you with CRM tasks, project management questions, and general business guidance. How can I assist you today?";
 $lang["ai_input_placeholder"] = "Type your message...";
 $lang["ai_input_hint"] = "Press Enter to send, Shift+Enter for new line";
 $lang["ai_new_chat"] = "New Chat";
@@ -63,16 +63,15 @@ $lang["ai_rate_limit_exceeded"] = "Rate limit exceeded. Please wait a moment bef
 $lang["ai_session_cleared"] = "Chat session cleared";
 
 // Subscription Messages
-$lang["ai_subscription_required"] = "An active subscription is required to use the AI assistant.";
+$lang["ai_subscription_required"] = "An active subscription is required to use the assistant.";
 $lang["ai_subscription_required_title"] = "Subscription Required";
 $lang["ai_subscription_required_message"] = "Unlock the power of AI assistance with a subscription. Get instant help with your CRM tasks, reports, and more.";
 $lang["ai_subscribe_now"] = "Subscribe Now";
 $lang["ai_subscription_not_available"] = "Subscription service is not available at this time.";
-$lang["ai_assistant_disabled"] = "AI Assistant is currently disabled.";
-$lang["ai_subscription_activated"] = "Your AI Assistant subscription has been activated successfully!";
+$lang["ai_assistant_disabled"] = "Assistant is currently disabled.";
+$lang["ai_subscription_activated"] = "Your assistant subscription has been activated successfully!";
 
-// Settings Menu
-$lang["ai_assistant"] = "AI Assistant";
+// Settings Menu (duplicate removed - using earlier definition)
 
 // Phase 3: Drafting and Summarization
 $lang["ai_draft_instructions_required"] = "Please provide instructions for the draft.";

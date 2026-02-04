@@ -219,9 +219,20 @@ $(document).ready(function() {
                     }
                 }
             },
-            error: function() {
+            error: function(xhr, status, error) {
                 hideTypingIndicator();
-                appendMessage('error', '<?php echo app_lang("ai_connection_error"); ?>');
+                console.log('AI Chat Error:', status, error, xhr.status, xhr.responseText);
+                var errorMsg = '<?php echo app_lang("ai_connection_error"); ?>';
+                if (xhr.status === 302 || xhr.status === 0) {
+                    errorMsg = 'Session expired. Please refresh the page.';
+                } else if (xhr.status === 403) {
+                    errorMsg = 'Access denied. Please refresh and try again.';
+                } else if (xhr.status === 500) {
+                    errorMsg = 'Server error. Check logs for details.';
+                } else if (status === 'parsererror') {
+                    errorMsg = 'Invalid response from server. Status: ' + xhr.status;
+                }
+                appendMessage('error', errorMsg + ' (Status: ' + xhr.status + ')');
             },
             complete: function() {
                 isProcessing = false;

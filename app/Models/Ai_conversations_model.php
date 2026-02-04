@@ -5,10 +5,49 @@ namespace App\Models;
 class Ai_conversations_model extends Crud_model {
 
     protected $table = null;
+    private static $table_checked = false;
 
     function __construct() {
         $this->table = 'ai_conversations';
         parent::__construct($this->table);
+
+        // Ensure table exists on first use
+        if (!self::$table_checked) {
+            $this->ensure_table_exists();
+            self::$table_checked = true;
+        }
+    }
+
+    /**
+     * Ensure the ai_conversations table exists, create if not
+     */
+    private function ensure_table_exists() {
+        $table_name = $this->db->prefixTable('ai_conversations');
+
+        // Check if table exists
+        $query = $this->db->query("SHOW TABLES LIKE '$table_name'");
+        if ($query->getNumRows() == 0) {
+            // Create the table
+            $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+                `id` INT PRIMARY KEY AUTO_INCREMENT,
+                `user_id` INT NOT NULL,
+                `session_id` VARCHAR(128) NOT NULL,
+                `module` VARCHAR(50) DEFAULT NULL COMMENT 'task, project, client, etc.',
+                `user_query` TEXT NOT NULL,
+                `assistant_response` TEXT,
+                `tokens_used` INT DEFAULT 0,
+                `context_snapshot` TEXT COMMENT 'JSON: permission state at query time',
+                `deleted` INT(1) NOT NULL DEFAULT 0,
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                INDEX `idx_user_session` (`user_id`, `session_id`),
+                INDEX `idx_created_at` (`created_at`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
+
+            $this->db->query($sql);
+
+            // Re-initialize the db_builder after table creation
+            $this->db_builder = $this->db->table($table_name);
+        }
     }
 
     /**

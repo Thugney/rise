@@ -5,10 +5,53 @@ namespace App\Models;
 class Ai_subscriptions_model extends Crud_model {
 
     protected $table = null;
+    private static $table_checked = false;
 
     function __construct() {
         $this->table = 'ai_subscriptions';
         parent::__construct($this->table);
+
+        // Ensure table exists on first use
+        if (!self::$table_checked) {
+            $this->ensure_table_exists();
+            self::$table_checked = true;
+        }
+    }
+
+    /**
+     * Ensure the ai_subscriptions table exists, create if not
+     */
+    private function ensure_table_exists() {
+        $table_name = $this->db->prefixTable('ai_subscriptions');
+        $users_table = $this->db->prefixTable('users');
+
+        // Check if table exists
+        $query = $this->db->query("SHOW TABLES LIKE '$table_name'");
+        if ($query->getNumRows() == 0) {
+            // Create the table
+            $sql = "CREATE TABLE IF NOT EXISTS `$table_name` (
+                `id` INT PRIMARY KEY AUTO_INCREMENT,
+                `user_id` INT NOT NULL,
+                `polar_customer_id` VARCHAR(128) NOT NULL DEFAULT '',
+                `polar_subscription_id` VARCHAR(128) NOT NULL DEFAULT '',
+                `status` ENUM('active', 'canceled', 'past_due', 'trialing', 'inactive') DEFAULT 'inactive',
+                `current_period_start` DATETIME DEFAULT NULL,
+                `current_period_end` DATETIME DEFAULT NULL,
+                `canceled_at` DATETIME DEFAULT NULL,
+                `plan_name` VARCHAR(100) DEFAULT 'ai_assistant_monthly',
+                `deleted` INT(1) NOT NULL DEFAULT 0,
+                `created_at` DATETIME DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY `uk_user_id` (`user_id`),
+                INDEX `idx_polar_subscription` (`polar_subscription_id`),
+                INDEX `idx_status` (`status`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci";
+
+            $this->db->query($sql);
+
+            // Re-initialize the db_builder after table creation
+            $this->db_builder = $this->db->table($table_name);
+        }
     }
 
     /**

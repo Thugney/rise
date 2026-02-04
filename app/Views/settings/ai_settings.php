@@ -9,6 +9,7 @@
 
         <div class="col-sm-9 col-lg-10">
             <?php echo form_open(get_uri("settings/save_ai_settings"), array("id" => "ai-settings-form", "class" => "general-form dashed-row", "role" => "form")); ?>
+            <?php echo csrf_field(); ?>
 
             <!-- AI Assistant Configuration -->
             <div class="card mb15">

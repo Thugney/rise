@@ -1,0 +1,47 @@
+# Environment and config
+.env
+env.php
+
+# Writable directories (logs, cache, sessions)
+writable/cache/*
+writable/logs/*
+writable/session/*
+writable/uploads/*
+writable/debugbar/*
+!writable/cache/.gitkeep
+!writable/logs/.gitkeep
+!writable/session/.gitkeep
+!writable/uploads/.gitkeep
+
+# IDE and OS files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Vendor (if using composer - uncomment if needed)
+# vendor/
+
+# Node modules (if using npm)
+node_modules/
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Local config overrides
+app/Config/Development/
+app/Config/Production/
+
+# User uploads (if stored locally)
+public/uploads/*
+!public/uploads/.gitkeep
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+credentials.json

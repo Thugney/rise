@@ -1,0 +1,91 @@
+# Robots.txt for Eriteach CRM
+# https://eriteach.com/crm
+
+User-agent: *
+
+# Allow public pages
+Allow: /crm/signup$
+Allow: /crm/about$
+Allow: /crm/about/*
+
+# Disallow all CRM application pages (private client area)
+Disallow: /crm/dashboard
+Disallow: /crm/projects
+Disallow: /crm/clients
+Disallow: /crm/events
+Disallow: /crm/tasks
+Disallow: /crm/invoices
+Disallow: /crm/leads
+Disallow: /crm/tickets
+Disallow: /crm/contracts
+Disallow: /crm/proposals
+Disallow: /crm/estimates
+Disallow: /crm/team_members
+Disallow: /crm/users
+Disallow: /crm/files
+Disallow: /crm/settings
+Disallow: /crm/signin
+Disallow: /crm/login
+Disallow: /crm/logout
+Disallow: /crm/forgot_password
+
+# Disallow admin and private areas
+Disallow: /crm/admin/
+Disallow: /crm/api/
+Disallow: /writable/
+Disallow: /app/
+Disallow: /system/
+
+# Disallow search and filter pages (avoid duplicate content)
+Disallow: /*?search=
+Disallow: /*?filter=
+Disallow: /*?sort=
+Disallow: /*&search=
+Disallow: /*&filter=
+Disallow: /*&sort=
+
+# Disallow session and tracking parameters
+Disallow: /*?session=
+Disallow: /*?sid=
+Disallow: /*?token=
+
+# Allow assets for better rendering in search results
+Allow: /assets/
+Allow: /plugins/
+
+# Sitemap location
+Sitemap: https://eriteach.com/crm/sitemap.xml
+
+# Crawl delay (be nice to servers)
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Disallow: /crm/dashboard
+Disallow: /crm/projects
+Disallow: /crm/clients
+Allow: /crm/signup
+Allow: /crm/about
+
+User-agent: Bingbot
+Disallow: /crm/dashboard
+Disallow: /crm/projects
+Disallow: /crm/clients
+Allow: /crm/signup
+Allow: /crm/about
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /

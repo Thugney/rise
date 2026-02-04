@@ -17,7 +17,7 @@ if (isset($login_user) && $login_user && is_ai_enabled()) {
     );
 
     // If subscription is required but user doesn't have one
-    if (!$ai_access['allowed'] && get_ai_setting('ai_require_subscription') === '1') {
+    if (!$ai_access['allowed'] && get_ai_setting('polar_enabled') === '1') {
         $ai_access['reason'] = 'subscription_required';
         $ai_access['message'] = app_lang('ai_subscription_required');
         $ai_access['checkout_url'] = get_ai_checkout_url($login_user->id);

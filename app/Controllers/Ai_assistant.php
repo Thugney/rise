@@ -54,7 +54,7 @@ class Ai_assistant extends Security_Controller {
         }
 
         // Gate 2: Is subscription required for non-admins?
-        if (get_ai_setting('ai_require_subscription') === '1') {
+        if (get_ai_setting('polar_enabled') === '1') {
             // Check if user has active subscription
             if (!has_ai_subscription($this->login_user->id)) {
                 $checkout_url = get_ai_checkout_url($this->login_user->id);
@@ -291,7 +291,7 @@ GUIDELINES:
      */
     function subscription_status() {
         $has_subscription = has_ai_subscription($this->login_user->id);
-        $subscription_required = get_ai_setting('ai_require_subscription') === '1';
+        $subscription_required = get_ai_setting('polar_enabled') === '1';
 
         $data = array(
             'success' => true,

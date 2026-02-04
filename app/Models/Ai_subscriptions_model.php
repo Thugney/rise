@@ -208,4 +208,30 @@ class Ai_subscriptions_model extends Crud_model {
             'deleted' => 0
         ));
     }
+
+    /**
+     * Count all records matching where conditions
+     *
+     * @param array $where Where conditions
+     * @return int Count
+     */
+    function count_all_where($where = array()) {
+        $table = $this->db->prefixTable('ai_subscriptions');
+
+        $conditions = array();
+        $params = array();
+
+        foreach ($where as $key => $value) {
+            $conditions[] = "$key = ?";
+            $params[] = $value;
+        }
+
+        $where_clause = count($conditions) > 0 ? 'WHERE ' . implode(' AND ', $conditions) : '';
+
+        $sql = "SELECT COUNT(*) as count FROM $table $where_clause";
+        $result = $this->db->query($sql, $params);
+        $row = $result->getRow();
+
+        return $row ? (int)$row->count : 0;
+    }
 }

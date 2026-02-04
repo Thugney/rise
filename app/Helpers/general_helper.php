@@ -3320,7 +3320,13 @@ if (!function_exists('has_ai_subscription')) {
  */
 if (!function_exists('get_ai_checkout_url')) {
 
-    function get_ai_checkout_url($user_id, $email) {
+    function get_ai_checkout_url($user_id, $email = null) {
+        // Get email from user if not provided
+        if ($email === null) {
+            $Users_model = model("App\Models\Users_model");
+            $user = $Users_model->get_one($user_id);
+            $email = $user->email ?? '';
+        }
         $polar = new \App\Libraries\Polar();
         return $polar->get_checkout_url($user_id, $email);
     }

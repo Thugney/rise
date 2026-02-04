@@ -272,10 +272,14 @@ class Ai_context {
             $summary['recent_projects'][] = array(
                 'id' => $project->id,
                 'title' => $project->title,
+                'description' => !empty($project->description) ? substr(strip_tags($project->description), 0, 200) : '',
                 'status' => $project->status_title ?? 'Unknown',
                 'client' => $project->company_name ?? 'N/A',
+                'start_date' => $project->start_date ?? null,
                 'deadline' => $project->deadline,
-                'progress' => $project->progress ?? 0
+                'progress' => $project->progress ?? 0,
+                'price' => $project->price ?? 0,
+                'labels' => $project->labels ?? ''
             );
         }
 
@@ -335,12 +339,16 @@ class Ai_context {
             $summary['recent_tasks'][] = array(
                 'id' => $task->id,
                 'title' => $task->title,
+                'description' => !empty($task->description) ? substr(strip_tags($task->description), 0, 200) : '',
                 'status' => $task->status_title ?? 'Unknown',
                 'project' => $task->project_title ?? 'N/A',
                 'client' => $task->client_name ?? $task->company_name ?? 'N/A',
-                'assigned_to' => $task->assigned_to_name ?? 'Unassigned',
+                'assigned_to' => $task->assigned_to_user ?? 'Unassigned',
+                'collaborators' => $task->collaborator_list ?? '',
+                'start_date' => $task->start_date ?? null,
                 'deadline' => $task->deadline,
-                'priority' => $task->priority_title ?? 'Normal'
+                'priority' => $task->priority_title ?? 'Normal',
+                'labels' => $task->labels ?? ''
             );
         }
 
@@ -581,11 +589,15 @@ class Ai_context {
             $summary['recent_tickets'][] = array(
                 'id' => $ticket->id,
                 'title' => $ticket->title,
+                'description' => !empty($ticket->description) ? substr(strip_tags($ticket->description), 0, 200) : '',
                 'status' => $ticket->status ?? 'open',
-                'type' => $ticket->ticket_type_title ?? 'General',
+                'type' => $ticket->ticket_type ?? 'General',
                 'client' => $ticket->company_name ?? 'N/A',
-                'assigned_to' => $ticket->assigned_to_name ?? 'Unassigned',
-                'created_at' => $ticket->created_at
+                'project' => $ticket->project_title ?? null,
+                'assigned_to' => $ticket->assigned_to_user ?? 'Unassigned',
+                'requested_by' => $ticket->requested_by_name ?? 'Unknown',
+                'created_at' => $ticket->created_at,
+                'labels' => $ticket->labels ?? ''
             );
         }
 
@@ -1067,37 +1079,71 @@ class Ai_context {
             // Add recent tasks details
             if ($module === 'tasks' && !empty($module_data['recent_tasks'])) {
                 $output[] = "";
-                $output[] = "RECENT TASKS:";
+                $output[] = "RECENT TASKS (detailed):";
                 foreach ($module_data['recent_tasks'] as $task) {
-                    $output[] = "- [{$task['status']}] {$task['title']}" .
-                                ($task['project'] !== 'N/A' ? " (Project: {$task['project']}" .
-                                    ($task['client'] !== 'N/A' ? ", Client: {$task['client']}" : "") . ")" : "") .
-                                ($task['deadline'] ? " - Due: {$task['deadline']}" : "") .
-                                ($task['assigned_to'] !== 'Unassigned' ? " - Assigned: {$task['assigned_to']}" : "");
+                    $output[] = "  Task: {$task['title']}";
+                    $output[] = "    - Status: {$task['status']}, Priority: {$task['priority']}";
+                    if ($task['project'] !== 'N/A') {
+                        $output[] = "    - Project: {$task['project']}" . ($task['client'] !== 'N/A' ? " (Client: {$task['client']})" : "");
+                    }
+                    $output[] = "    - Assigned to: {$task['assigned_to']}";
+                    if (!empty($task['collaborators'])) {
+                        $output[] = "    - Collaborators: {$task['collaborators']}";
+                    }
+                    if ($task['start_date'] || $task['deadline']) {
+                        $output[] = "    - Dates: " . ($task['start_date'] ? "Start: {$task['start_date']}" : "") .
+                                    ($task['deadline'] ? " Due: {$task['deadline']}" : "");
+                    }
+                    if (!empty($task['description'])) {
+                        $output[] = "    - Description: {$task['description']}";
+                    }
+                    $output[] = "";
                 }
             }
 
             // Add recent projects details
             if ($module === 'projects' && !empty($module_data['recent_projects'])) {
                 $output[] = "";
-                $output[] = "RECENT PROJECTS:";
+                $output[] = "RECENT PROJECTS (detailed):";
                 foreach ($module_data['recent_projects'] as $proj) {
-                    $output[] = "- [{$proj['status']}] {$proj['title']}" .
-                                ($proj['client'] !== 'N/A' ? " (Client: {$proj['client']})" : "") .
-                                ($proj['deadline'] ? " - Deadline: {$proj['deadline']}" : "") .
-                                " - Progress: {$proj['progress']}%";
+                    $output[] = "  Project: {$proj['title']}";
+                    $output[] = "    - Status: {$proj['status']}, Progress: {$proj['progress']}%";
+                    if ($proj['client'] !== 'N/A') {
+                        $output[] = "    - Client: {$proj['client']}";
+                    }
+                    if ($proj['start_date'] || $proj['deadline']) {
+                        $output[] = "    - Dates: " . ($proj['start_date'] ? "Start: {$proj['start_date']}" : "") .
+                                    ($proj['deadline'] ? " Deadline: {$proj['deadline']}" : "");
+                    }
+                    if ($proj['price'] > 0) {
+                        $output[] = "    - Budget/Price: " . number_format($proj['price'], 2);
+                    }
+                    if (!empty($proj['description'])) {
+                        $output[] = "    - Description: {$proj['description']}";
+                    }
+                    $output[] = "";
                 }
             }
 
             // Add recent clients details
             if ($module === 'clients' && !empty($module_data['recent_clients'])) {
                 $output[] = "";
-                $output[] = "RECENT CLIENTS:";
+                $output[] = "RECENT CLIENTS (detailed):";
                 foreach ($module_data['recent_clients'] as $client) {
-                    $output[] = "- {$client['company_name']}" .
-                                ($client['primary_contact'] ? " (Contact: {$client['primary_contact']})" : "") .
-                                ($client['email'] ? " - {$client['email']}" : "") .
-                                ($client['phone'] ? " - {$client['phone']}" : "");
+                    $output[] = "  Client: {$client['company_name']}";
+                    if ($client['primary_contact']) {
+                        $output[] = "    - Contact: {$client['primary_contact']}";
+                    }
+                    if ($client['email']) {
+                        $output[] = "    - Email: {$client['email']}";
+                    }
+                    if ($client['phone']) {
+                        $output[] = "    - Phone: {$client['phone']}";
+                    }
+                    if ($client['city']) {
+                        $output[] = "    - Location: {$client['city']}";
+                    }
+                    $output[] = "";
                 }
             }
 
@@ -1127,24 +1173,50 @@ class Ai_context {
             // Add recent tickets details
             if ($module === 'tickets' && !empty($module_data['recent_tickets'])) {
                 $output[] = "";
-                $output[] = "RECENT TICKETS:";
+                $output[] = "RECENT TICKETS (detailed):";
                 foreach ($module_data['recent_tickets'] as $ticket) {
-                    $output[] = "- [{$ticket['status']}] {$ticket['title']}" .
-                                " (Type: {$ticket['type']})" .
-                                ($ticket['client'] !== 'N/A' ? " - Client: {$ticket['client']}" : "") .
-                                ($ticket['assigned_to'] !== 'Unassigned' ? " - Assigned: {$ticket['assigned_to']}" : "");
+                    $output[] = "  Ticket: {$ticket['title']}";
+                    $output[] = "    - Status: {$ticket['status']}, Type: {$ticket['type']}";
+                    if ($ticket['client'] !== 'N/A') {
+                        $output[] = "    - Client: {$ticket['client']}";
+                    }
+                    if (!empty($ticket['project'])) {
+                        $output[] = "    - Project: {$ticket['project']}";
+                    }
+                    $output[] = "    - Assigned to: {$ticket['assigned_to']}";
+                    if (!empty($ticket['requested_by']) && $ticket['requested_by'] !== 'Unknown') {
+                        $output[] = "    - Requested by: {$ticket['requested_by']}";
+                    }
+                    if ($ticket['created_at']) {
+                        $output[] = "    - Created: {$ticket['created_at']}";
+                    }
+                    if (!empty($ticket['description'])) {
+                        $output[] = "    - Description: {$ticket['description']}";
+                    }
+                    $output[] = "";
                 }
             }
 
             // Add recent leads details
             if ($module === 'leads' && !empty($module_data['recent_leads'])) {
                 $output[] = "";
-                $output[] = "RECENT LEADS:";
+                $output[] = "RECENT LEADS (detailed):";
                 foreach ($module_data['recent_leads'] as $lead) {
-                    $output[] = "- [{$lead['status']}] {$lead['company_name']}" .
-                                ($lead['contact'] ? " (Contact: {$lead['contact']})" : "") .
-                                ($lead['email'] ? " - {$lead['email']}" : "") .
-                                ($lead['owner'] !== 'Unassigned' ? " - Owner: {$lead['owner']}" : "");
+                    $output[] = "  Lead: {$lead['company_name']}";
+                    $output[] = "    - Status: {$lead['status']}";
+                    if ($lead['contact']) {
+                        $output[] = "    - Contact: {$lead['contact']}";
+                    }
+                    if ($lead['email']) {
+                        $output[] = "    - Email: {$lead['email']}";
+                    }
+                    if ($lead['owner'] !== 'Unassigned') {
+                        $output[] = "    - Owner: {$lead['owner']}";
+                    }
+                    if (!empty($lead['source'])) {
+                        $output[] = "    - Source: {$lead['source']}";
+                    }
+                    $output[] = "";
                 }
             }
 

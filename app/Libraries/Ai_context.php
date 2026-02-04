@@ -337,6 +337,7 @@ class Ai_context {
                 'title' => $task->title,
                 'status' => $task->status_title ?? 'Unknown',
                 'project' => $task->project_title ?? 'N/A',
+                'client' => $task->client_name ?? $task->company_name ?? 'N/A',
                 'assigned_to' => $task->assigned_to_name ?? 'Unassigned',
                 'deadline' => $task->deadline,
                 'priority' => $task->priority_title ?? 'Normal'
@@ -1069,7 +1070,8 @@ class Ai_context {
                 $output[] = "RECENT TASKS:";
                 foreach ($module_data['recent_tasks'] as $task) {
                     $output[] = "- [{$task['status']}] {$task['title']}" .
-                                ($task['project'] !== 'N/A' ? " (Project: {$task['project']})" : "") .
+                                ($task['project'] !== 'N/A' ? " (Project: {$task['project']}" .
+                                    ($task['client'] !== 'N/A' ? ", Client: {$task['client']}" : "") . ")" : "") .
                                 ($task['deadline'] ? " - Due: {$task['deadline']}" : "") .
                                 ($task['assigned_to'] !== 'Unassigned' ? " - Assigned: {$task['assigned_to']}" : "");
                 }

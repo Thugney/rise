@@ -1063,6 +1063,42 @@ class Ai_context {
                 $output[] = "- Total Due: " . number_format($module_data['total_due'], 2);
             }
 
+            // Add recent tasks details
+            if ($module === 'tasks' && !empty($module_data['recent_tasks'])) {
+                $output[] = "";
+                $output[] = "RECENT TASKS:";
+                foreach ($module_data['recent_tasks'] as $task) {
+                    $output[] = "- [{$task['status']}] {$task['title']}" .
+                                ($task['project'] !== 'N/A' ? " (Project: {$task['project']})" : "") .
+                                ($task['deadline'] ? " - Due: {$task['deadline']}" : "") .
+                                ($task['assigned_to'] !== 'Unassigned' ? " - Assigned: {$task['assigned_to']}" : "");
+                }
+            }
+
+            // Add recent projects details
+            if ($module === 'projects' && !empty($module_data['recent_projects'])) {
+                $output[] = "";
+                $output[] = "RECENT PROJECTS:";
+                foreach ($module_data['recent_projects'] as $proj) {
+                    $output[] = "- [{$proj['status']}] {$proj['title']}" .
+                                ($proj['client'] !== 'N/A' ? " (Client: {$proj['client']})" : "") .
+                                ($proj['deadline'] ? " - Deadline: {$proj['deadline']}" : "") .
+                                " - Progress: {$proj['progress']}%";
+                }
+            }
+
+            // Add recent clients details
+            if ($module === 'clients' && !empty($module_data['recent_clients'])) {
+                $output[] = "";
+                $output[] = "RECENT CLIENTS:";
+                foreach ($module_data['recent_clients'] as $client) {
+                    $output[] = "- {$client['company_name']}" .
+                                ($client['primary_contact'] ? " (Contact: {$client['primary_contact']})" : "") .
+                                ($client['email'] ? " - {$client['email']}" : "") .
+                                ($client['phone'] ? " - {$client['phone']}" : "");
+                }
+            }
+
             // Add recent payment details for invoices
             if ($module === 'invoices' && !empty($module_data['recent_payments'])) {
                 $output[] = "";
@@ -1083,6 +1119,64 @@ class Ai_context {
                     $output[] = "- #{$inv['invoice_number']} ({$inv['client']}): " .
                                 number_format($inv['total'], 2) . " - Status: {$inv['status']}" .
                                 ($inv['due_date'] ? ", Due: {$inv['due_date']}" : "");
+                }
+            }
+
+            // Add recent tickets details
+            if ($module === 'tickets' && !empty($module_data['recent_tickets'])) {
+                $output[] = "";
+                $output[] = "RECENT TICKETS:";
+                foreach ($module_data['recent_tickets'] as $ticket) {
+                    $output[] = "- [{$ticket['status']}] {$ticket['title']}" .
+                                " (Type: {$ticket['type']})" .
+                                ($ticket['client'] !== 'N/A' ? " - Client: {$ticket['client']}" : "") .
+                                ($ticket['assigned_to'] !== 'Unassigned' ? " - Assigned: {$ticket['assigned_to']}" : "");
+                }
+            }
+
+            // Add recent leads details
+            if ($module === 'leads' && !empty($module_data['recent_leads'])) {
+                $output[] = "";
+                $output[] = "RECENT LEADS:";
+                foreach ($module_data['recent_leads'] as $lead) {
+                    $output[] = "- [{$lead['status']}] {$lead['company_name']}" .
+                                ($lead['contact'] ? " (Contact: {$lead['contact']})" : "") .
+                                ($lead['email'] ? " - {$lead['email']}" : "") .
+                                ($lead['owner'] !== 'Unassigned' ? " - Owner: {$lead['owner']}" : "");
+                }
+            }
+
+            // Add recent estimates details
+            if ($module === 'estimates' && !empty($module_data['recent_estimates'])) {
+                $output[] = "";
+                $output[] = "RECENT ESTIMATES:";
+                foreach ($module_data['recent_estimates'] as $est) {
+                    $output[] = "- #{$est['estimate_number']} ({$est['client']}): " .
+                                number_format($est['total'], 2) . " - Status: {$est['status']}" .
+                                ($est['valid_until'] ? ", Valid until: {$est['valid_until']}" : "");
+                }
+            }
+
+            // Add recent expenses details
+            if ($module === 'expenses' && !empty($module_data['recent_expenses'])) {
+                $output[] = "";
+                $output[] = "RECENT EXPENSES:";
+                foreach ($module_data['recent_expenses'] as $exp) {
+                    $output[] = "- {$exp['title']} ({$exp['category']}): " .
+                                number_format($exp['amount'], 2) .
+                                ($exp['date'] ? " - Date: {$exp['date']}" : "") .
+                                ($exp['project'] ? " - Project: {$exp['project']}" : "");
+                }
+            }
+
+            // Add recent contracts details
+            if ($module === 'contracts' && !empty($module_data['recent_contracts'])) {
+                $output[] = "";
+                $output[] = "RECENT CONTRACTS:";
+                foreach ($module_data['recent_contracts'] as $con) {
+                    $output[] = "- [{$con['status']}] {$con['title']} ({$con['client']}): " .
+                                number_format($con['value'], 2) .
+                                ($con['end_date'] ? " - Ends: {$con['end_date']}" : "");
                 }
             }
 
